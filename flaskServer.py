@@ -12,8 +12,10 @@ api = [{'id': 0, 'header': 'current temperature', 'value': 22.8},
        {'id': 7, 'header': 'manual height value', 'value': 30},
        {'id': 8, 'header': 'manual tilt value', 'value': 45},
        {'id': 9, 'header': 'current heater value', 'value': True},
-       {'id': 10, 'header': 'current height value', 'value': 95},
-       {'id': 11, 'header': 'current tilt value', 'value': 12}]
+       {'id': 10, 'header': 'current height value', 'value': 60},
+       {'id': 11, 'header': 'current tilt value', 'value': 10}]
+
+basePath = 'http://127.0.0.1:105/'
 
 # To get api in web browser type in http://localhost:105/dorn/all
 @app.route('/dorn/all', methods=['GET'])
@@ -43,7 +45,8 @@ def api_get(id):
 # Render index html with api values
 @app.route('/')
 def index():
-    data = requests.get("http://127.0.0.1:5000/dorn/all").json()
+    path = basePath + 'dorn/all'
+    data = requests.get(path).json()
     current = {'lightLevel':data[1]['value'], 'temperature':data[0]['value'],
                  'heater':data[9]['value'], 'height':data[10]['value'], 'tilt':data[11]['value']}
     reference = {'lightLevel':data[3]['value'], 'temperature':data[2]['value'],
@@ -54,55 +57,62 @@ def index():
 # Change reference light and redirect to index
 @app.route('/lightForm', methods=['POST'])
 def light():
+    path3 = basePath + 'dorn/3'
     if request.method == 'POST':
         result = request.form['refLight']
         data = json.dumps({'value': result})
-        requests.put("http://127.0.0.1:5000/dorn/3", json=data)
+        requests.put(path3, json=data)
         return redirect(url_for('index'))
 
 # Change reference temperature and redirect to index
 @app.route('/tempForm', methods=['POST'])
 def temp():
+    path2 = basePath + 'dorn/2'
     if request.method == 'POST':
         result = request.form['refTemp']
         data = json.dumps({'value': result})
-        requests.put("http://127.0.0.1:5000/dorn/2", json=data)
+        requests.put(path2, json=data)
         return redirect(url_for('index'))
     
 # Change manual blind position and redirect to index
 @app.route('/blindsForm', methods=['POST'])
 def blinds():
+    path6 = basePath + 'dorn/6'
+    path7 = basePath + 'dorn/7'
+    path8 = basePath + 'dorn/8'
     if request.method == 'POST':
         if request.form.get('manBlinds'):
             value = json.dumps({'value': True})
         else:
             value = json.dumps({'value': False})
-        requests.put("http://127.0.0.1:5000/dorn/6", json=value)
+        requests.put(path6, json=value)
 
         result1 = request.form['manHeight']
         data1 = json.dumps({'value': result1})
-        requests.put("http://127.0.0.1:5000/dorn/7", json=data1)
+        requests.put(path7, json=data1)
         
         result2 = request.form['manTilt']
         data2 = json.dumps({'value': result2})
-        requests.put("http://127.0.0.1:5000/dorn/8", json=data2)
+        requests.put(path8, json=data2)
         return redirect(url_for('index'))
 
 # Change manual heater status and redirect to index
 @app.route('/heaterForm', methods=['POST'])
 def heater():
+    path4 = basePath + 'dorn/4'
+    path5 = basePath + 'dorn/5'
     if request.method == 'POST':
         if request.form.get('manHeater'):
             value1 = json.dumps({'value': True})
         else:
             value1 = json.dumps({'value': False})
-        requests.put("http://127.0.0.1:5000/dorn/4", json=value1)
+        requests.put(path4, json=value1)
 
         if request.form.get('refHeater'):
             value2 = json.dumps({'value': True})
         else:
             value2 = json.dumps({'value': False})
-        requests.put("http://127.0.0.1:5000/dorn/5", json=value2)
+        requests.put(path5, json=value2)
         return redirect(url_for('index'))   
  
 # Render datalogger with requested timeframe
@@ -116,4 +126,4 @@ def datalogger():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=105, debug=True)
