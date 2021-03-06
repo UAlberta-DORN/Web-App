@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <!-- Custom styles for this template-->
-  <link rel="stylesheet" href="static/sb-admin-2.css">
+  <link rel="stylesheet" href="static/sb-admin-2.min.css">
   <link rel="stylesheet" type="text/css" href="static/extras.css">
 
 </head>
@@ -35,7 +35,7 @@
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
           <div class="lighttext mx-3">
-          	<a class="nav-link" href="{{ url_for('index') }}">Intelligent Lighting and Temperature Control System</a>
+            <a class="nav-link" href="{{ url_for('index') }}">Intelligent Lighting and Temperature Control System</a>
           </div>
 
           <!-- Topbar Navbar -->
@@ -67,7 +67,7 @@
           
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Datalogger</h1>
+          <h1 class="h3 mb-2 text-gray-800">Datalogger</h1> 
 
           <!-- Content Row -->
           <div class="row">
@@ -77,7 +77,7 @@
               <!-- Area Chart -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Lighting</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Light Level</h6>
                 </div>
                 <div class="card-body">
                   <div class="chart-area">
@@ -114,7 +114,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Last updated January 2021</span>
+            <span>Last updated March 2021</span>
           </div>
         </div>
       </footer>
@@ -150,14 +150,29 @@
     </div>
   </div>
 
-  <!-- Custom scripts for all pages-->
-  <script src="static/sb-admin-2.min.js"></script>
 
   <!-- Page level plugins -->
-  <script src="static/vendor/chart.js/Chart.min.js"></script>
+  <script src="static/Chart.min.js"></script>
 
-  <!-- Page level custom scripts -->
-  <script src="static/dataloggerChart.js"></script>
+  <!-- Custom chart scripts -->
+  {% include "dataloggerChart.html" %}
+
+  <script type ="text/javascript">
+    var timeArray = [];
+    var lightArray = [];
+    var tempArray = [];
+
+    {% for item in jsonArray %}
+    timeArray.push('{{item.Time}}');
+    lightArray.push('{{item.currentLighting}}');
+    tempArray.push('{{item.currentTemperature}}');
+    {% endfor %}
+
+    lineChart1("lightingChart", timeArray, lightArray);
+    lineChart1("temperatureChart", timeArray, tempArray);
+
+  </script>
+
 
 
 </body>
