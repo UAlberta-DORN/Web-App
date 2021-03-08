@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Datalogger</title>
+  <title>Datalogger - Intelligent Lighting and Temperature Control System</title>
 
   <!-- Custom fonts for this template-->
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -101,6 +101,48 @@
               </div>
 
             </div>
+
+          </div>
+
+          <!-- Datalogger -->
+          <div class="row">
+
+            <div class="col-lg-6 mb-4">
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Change Date/Time</h5>  
+                </div>
+                <div class="card-body">
+                <form class="d-none d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search" method="POST" action="datalogger">
+                   <div class="input-group">
+                    <div><label>Date</label><br>
+                      <input type="date" name="requestDate" required> </div>
+                    <div><label>Start time</label><br>
+                      <input type="time" name="requestTime1" required></div>
+                    <div><label>End time</label><br>
+                      <input type="time" name="requestTime2" required></div>
+                    <div><label>-</label><br>
+                      <input type="submit" name="submit" value="Submit"></div>
+                   </div>
+                </form> 
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+              <!-- Area Chart -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Generate Report</h6>
+                </div>
+                <div class="card-body">
+                  <input type="button" value="Download">
+                </div>
+              </div>
+
+            </div>
+
+
 
           </div>
 
