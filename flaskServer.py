@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, jsonify, request, abort, json
-import requests
+import requests, csv
 app = Flask(__name__)
 
 api = [{'id': 0, 'header': 'current temperature', 'value': 22.8},
@@ -118,11 +118,25 @@ def heater():
 # Render datalogger with requested timeframe
 @app.route('/datalogger', methods=['POST'])
 def datalogger():
+    csvFilePath = r'graphData.csv'
+    date = '2021-02-09'
+    time1 = '12:00'
+    time2 = '12:15'    
     if request.method == 'POST':
-        timeframe = {'date':request.form['requestDate'],
-              'time1':request.form['requestTime1'],
-              'time2':request.form['requestTime2']}
-    return render_template('datalogger.html', timeframe=timeframe)
+        date = request.form['requestDate']
+        time1 = request.form['requestTime1']
+        time2 = request.form['requestTime2']
+    jsonArray = []    
+    #read csv file
+    with open(csvFilePath, encoding='utf-8') as csvf: 
+        #load csv file data using csv library's dictionary reader
+        csvReader = csv.DictReader(csvf) 
+        #convert each csv row into python dict
+        for row in csvReader: 
+            #add this python dict to json array
+            if (row['Date'] == date) and (time1 <= row['Time'] <= time2):
+                jsonArray.append(row)        
+    return render_template('datalogger.html', jsonArray=jsonArray)
 
 
 if __name__ == '__main__':
