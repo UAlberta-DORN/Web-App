@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, jsonify, request, abort, json
 import requests, csv
+
 app = Flask(__name__)
 
 api = [{'id': 0, 'header': 'current temperature', 'value': 22.8},
@@ -54,79 +55,70 @@ def index():
     manual = {'blinds':data[6]['value'], 'heater':data[4]['value']}
     return render_template('index.html', current=current, reference=reference, manual=manual)
 
-# Change reference light and redirect to index
-@app.route('/lightForm', methods=['POST'])
-def light():
-    path3 = basePath + 'dorn/3'
-    if request.method == 'POST':
-        result = request.form['refLight']
-        data = json.dumps({'value': result})
-        requests.put(path3, json=data)
-        return redirect(url_for('index'))
-
-# Change reference temperature and redirect to index
-@app.route('/tempForm', methods=['POST'])
-def temp():
+# Change submitted values and redirect to index
+@app.route('/submitForm', methods=['POST'])
+def submitForm():
     path2 = basePath + 'dorn/2'
-    if request.method == 'POST':
-        result = request.form['refTemp']
-        data = json.dumps({'value': result})
-        requests.put(path2, json=data)
-        return redirect(url_for('index'))
-    
-# Change manual blind position and redirect to index
-@app.route('/blindsForm', methods=['POST'])
-def blinds():
+    path3 = basePath + 'dorn/3'
+    path4 = basePath + 'dorn/4'
+    path5 = basePath + 'dorn/5'
     path6 = basePath + 'dorn/6'
     path7 = basePath + 'dorn/7'
     path8 = basePath + 'dorn/8'
+    
     if request.method == 'POST':
-        if request.form.get('manBlinds'):
-            value = json.dumps({'value': True})
-        else:
-            value = json.dumps({'value': False})
-        requests.put(path6, json=value)
-
-        result1 = request.form['manHeight']
-        data1 = json.dumps({'value': result1})
-        requests.put(path7, json=data1)
-        
-        result2 = request.form['manTilt']
+        result2 = request.form['refTemp']
         data2 = json.dumps({'value': result2})
-        requests.put(path8, json=data2)
-        return redirect(url_for('index'))
-
-# Change manual heater status and redirect to index
-@app.route('/heaterForm', methods=['POST'])
-def heater():
-    path4 = basePath + 'dorn/4'
-    path5 = basePath + 'dorn/5'
-    if request.method == 'POST':
+        requests.put(path2, json=data2)
+        
+        result3 = request.form['refLight']
+        data3 = json.dumps({'value': result3})
+        requests.put(path3, json=data3)
+        
         if request.form.get('manHeater'):
-            value1 = json.dumps({'value': True})
+            value4 = json.dumps({'value': True})
         else:
-            value1 = json.dumps({'value': False})
-        requests.put(path4, json=value1)
+            value4 = json.dumps({'value': False})
+        requests.put(path4, json=value4)
 
         if request.form.get('refHeater'):
-            value2 = json.dumps({'value': True})
+            value5 = json.dumps({'value': True})
         else:
-            value2 = json.dumps({'value': False})
-        requests.put(path5, json=value2)
-        return redirect(url_for('index'))   
+            value5 = json.dumps({'value': False})
+        requests.put(path5, json=value5)
+        
+        if request.form.get('manBlinds'):
+            value6 = json.dumps({'value': True})
+        else:
+            value6 = json.dumps({'value': False})
+        requests.put(path6, json=value6)
+
+        result7 = request.form['manHeight']
+        data7 = json.dumps({'value': result7})
+        requests.put(path7, json=data7)
+        
+        result8 = request.form['manTilt']
+        data8 = json.dumps({'value': result8})
+        requests.put(path8, json=data8)
+
+        return redirect(url_for('index'))
+
  
 # Render datalogger with requested timeframe
 @app.route('/datalogger', methods=['POST'])
 def datalogger():
     csvFilePath = r'graphData.csv'
+    jsonFilePath = r'graphData.json'
+    graphPath = basePath + 'graphData'
     date = '2021-02-09'
     time1 = '12:00'
-    time2 = '12:15'    
+    time2 = '12:15'
+    jsonArray = []
     if request.method == 'POST':
         date = request.form['requestDate']
         time1 = request.form['requestTime1']
         time2 = request.form['requestTime2']
-    jsonArray = []    
+    timeframe = {'date':date, 'time1':time1, 'time2':time2}    
     #read csv file
     with open(csvFilePath, encoding='utf-8') as csvf: 
         #load csv file data using csv library's dictionary reader
@@ -135,8 +127,20 @@ def datalogger():
         for row in csvReader: 
             #add this python dict to json array
             if (row['Date'] == date) and (time1 <= row['Time'] <= time2):
-                jsonArray.append(row)        
-    return render_template('datalogger.html', jsonArray=jsonArray)
+                jsonArray.append(row)
+    #convert python jsonArray to JSON String and write to file
+    with open(jsonFilePath, 'w', encoding='utf-8') as jsonf: 
+        jsonString = json.dumps(jsonArray, indent=4)
+        jsonf.write(jsonString)
+    return render_template('datalogger.html', jsonArray=jsonArray, timeframe=timeframe)
+
+@app.route('/graphData')
+def graphData():
+    jsonContent=[]
+    jsonFileObject = open('graphData.json', 'r')
+    jsonContent = json.loads(jsonFileObject.read())
+    return jsonify(jsonContent)
+    
 
 
 if __name__ == '__main__':
