@@ -18,6 +18,11 @@
   <link rel="stylesheet" href="static/sb-admin-2.min.css">
   <link rel="stylesheet" type="text/css" href="static/extras.css">
 
+  <style>
+    div.extraPadding2{
+      padding-bottom: 102px;
+    }
+  </style>
 </head>
 
 <body id="page-top">
@@ -105,7 +110,25 @@
           </div>
 
           <!-- Datalogger -->
-          <div class="row">
+          <div class="row">          
+
+            <div class="col-lg-6 mb-4">
+              <!-- Area Chart -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Generate Json File</h6>
+                </div>
+                <div class="card-body">
+                  {% if jsonArray != [] %}
+                  <a class="btn btn-primary" href="{{ url_for('graphData') }}" download="Light and Temp Data, {{jsonArray[0].Date}}, {{jsonArray[0].Time}} to {{jsonArray[-1].Time}}.json">Download</a>
+                  {% else %}
+                  <a class="btn btn-primary">No Data</a>
+                  {% endif %} 
+                  <div class="extraPadding2">
+                  </div>                 
+                </div>
+              </div>
+            </div>
 
             <div class="col-lg-6 mb-4">
               <div class="card shadow mb-4">
@@ -121,28 +144,13 @@
                       <input type="time" name="requestTime1" required></div>
                     <div><label>End time</label><br>
                       <input type="time" name="requestTime2" required></div>
-                    <div><label>-</label><br>
-                      <input type="submit" name="submit" value="Submit"></div>
                    </div>
+                   <br>
+                   <input class="btn btn-primary" type="submit" name="submit" value="Submit">
                 </form> 
                 </div>
               </div>
             </div>
-
-            <div class="col-lg-6 mb-4">
-              <!-- Area Chart -->
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Generate Report</h6>
-                </div>
-                <div class="card-body">
-                  <input type="button" value="Download">
-                </div>
-              </div>
-
-            </div>
-
-
 
           </div>
 
