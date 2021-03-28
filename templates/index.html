@@ -17,6 +17,14 @@
   <!-- Custom styles for this template-->
   <link rel="stylesheet" href="static/sb-admin-2.min.css">
   <link rel="stylesheet" type="text/css" href="static/extras.css">
+  <style>
+    div.extraPadding1{
+  padding-bottom: 17px;
+  }
+      div.extraPadding2{
+  padding-bottom: 102px;
+  }
+  </style>
 
 </head>
 
@@ -35,7 +43,9 @@
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
           <div class="lighttext mx-3">
+            <h5 class="m-0 font-weight-bold text-primary">
           	<a class="nav-link" href="{{ url_for('index') }}">Intelligent Lighting and Temperature Control System</a>
+            </h5>
           </div>
 
           <!-- Topbar Navbar -->
@@ -70,6 +80,7 @@
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
           </div>
 
+          <form method="post" action="submitForm">
           <!-- Content Row: Light Level and Temperature -->
           <div class="row">
 
@@ -85,13 +96,11 @@
                   <br>
                   <br>
                   <h4 class="small font-weight-bold">Desired Light Level</h4>
-                  <form class="d-none d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search" method="post" action="lightForm">
+                  <div class="d-none d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
-                      <input type="number" id="refLight" name="refLight" class="form-control bg-light border-0 small" placeholder="{{reference.lightLevel}}" aria-label="Search" aria-describedby="basic-addon2" min="0" max="1000" required> 
+                      <input type="number" id="refLight" name="refLight" class="form-control bg-light border-0 small" value="{{reference.lightLevel}}" aria-label="Search" aria-describedby="basic-addon2" min="0" max="1000" required> 
                     </div>
-                    <input type="submit" value="Submit">
-                  </form>
-
+              	  </div>
                 </div>
               </div>
             </div>
@@ -108,13 +117,11 @@
                   <br>
                   <br>
                   <h4 class="small font-weight-bold">Desired Temperature</h4>
-                  <form class="d-none d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search" method="post" action="tempForm">
+                  <div class="d-none d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
-                      <input type="number" id="refTemp" name="refTemp" class="form-control bg-light border-0 small" placeholder="{{reference.temperature}}" aria-label="Search" aria-describedby="basic-addon2" min="0" max="50" required>
+                      <input type="number" id="refTemp" name="refTemp" class="form-control bg-light border-0 small" value="{{reference.temperature}}" aria-label="Search" aria-describedby="basic-addon2" min="0" max="50" required>
                     </div>
-                    <input type="submit" value="Submit">
-                  </form>
-
+              	  </div>
                 </div>
               </div>
             </div>
@@ -147,7 +154,6 @@
                   </div>
                   <br>
 
-                  <form method="post" action="blindsForm">
                   	<div class="row">
                     	<div class="col-lg-12 mb-4 center1">
                     		<h4 class="small font-weight-bold">Manual Blind Control</h4>
@@ -182,10 +188,7 @@
                     		<h3 class="dinline">%</h3>
                   		</div>
                 	</div>
-                	<div class="col-lg-12 mb-4 center1">
-                		<input type="submit" value="Submit">
-                	</div>
-                  </form>
+
               	</div>
               </div>
             </div>
@@ -210,7 +213,6 @@
 
                   <br>
 
-                  <form method="post" action="heaterForm">
                   	<div class="row">
                     	<div class="col-lg-12 mb-4 center1">
                       		<h4 class="small font-weight-bold">Manual Heater Control</h4>
@@ -240,10 +242,9 @@
                       		</label>
                     	</div>
                   	</div>
-                  	<div class="col-lg-12 mb-4 center1">
-                		<input type="submit" value="Submit">
-                	</div>
-                  </form>
+                    <div class="extraPadding1"> 
+                    </div>
+                  
                 </div>
               </div>
             </div>
@@ -252,7 +253,21 @@
 
           <!-- Datalogger -->
           <div class="row">
-            <div class="col-lg-12 mb-4">
+            <div class="col-lg-6 mb-4">
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h5 class="m-0 font-weight-bold text-primary">Submit Values</h5>  
+                </div>
+                <div class="card-body">
+                  <input class="btn btn-primary" type="submit" value="Submit">
+                  <div class="extraPadding2">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+            <div class="col-lg-6 mb-4">
             	<div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h5 class="m-0 font-weight-bold text-primary">Datalogger</h5>  
@@ -266,9 +281,9 @@
                    		<input type="time" name="requestTime1" required></div>
                    	<div><label>End time</label><br>
                    		<input type="time" name="requestTime2" required></div>
-                   	<div><label>-</label><br>
-                   		<input type="submit" name="submit" value="Submit"></div>
                    </div>
+                   <br>
+                   <input class="btn btn-primary" type="submit" name="submit" value="Submit">
                 </form>	
                 </div>
               </div>
