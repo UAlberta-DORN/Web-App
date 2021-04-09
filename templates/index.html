@@ -92,13 +92,13 @@
                 <div class="card-body center1">
                   <h4 class="small font-weight-bold">Current Light Level</h4>
                     <h1 class="dinline">{{current.lightLevel}} </h1>
-                    <h3 class="mt-2 dinline"> lux</h3>
+                    <h3 class="mt-2 dinline">%</h3>
                   <br>
                   <br>
                   <h4 class="small font-weight-bold">Desired Light Level</h4>
                   <div class="d-none d-sm-inline-block form-inline mr-auto my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
-                      <input type="number" id="refLight" name="refLight" class="form-control bg-light border-0 small" value="{{reference.lightLevel}}" aria-label="Search" aria-describedby="basic-addon2" min="0" max="1000" required> 
+                      <input type="number" id="refLight" name="refLight" class="form-control bg-light border-0 small" value="{{reference.lightLevel}}" aria-label="Search" aria-describedby="basic-addon2" min="0" max="100" required> 
                     </div>
               	  </div>
                 </div>
@@ -315,7 +315,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Last updated March 2021</span>
+            <span>Last updated April 2021</span>
           </div>
         </div>
       </footer>
