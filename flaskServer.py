@@ -4,9 +4,9 @@ import requests, csv
 app = Flask(__name__)
 
 api = [{'id': 0, 'header': 'current temperature', 'value': 22.8},
-       {'id': 1, 'header': 'current lighting', 'value': 600},
+       {'id': 1, 'header': 'current lighting', 'value': 60},
        {'id': 2, 'header': 'reference temperature', 'value': 25},
-       {'id': 3, 'header': 'reference lighting', 'value': 400},
+       {'id': 3, 'header': 'reference lighting', 'value': 40},
        {'id': 4, 'header': 'manual heater control', 'value': False},
        {'id': 5, 'header': 'manual heater value', 'value': False},
        {'id': 6, 'header': 'manual blind control', 'value': False},
@@ -16,7 +16,7 @@ api = [{'id': 0, 'header': 'current temperature', 'value': 22.8},
        {'id': 10, 'header': 'current height value', 'value': 60},
        {'id': 11, 'header': 'current tilt value', 'value': 10}]
 
-basePath = 'http://127.0.0.1:105/'
+basePath = 'http://127.0.0.1:80/'
 
 # To get api in web browser type in http://localhost:105/dorn/all
 @app.route('/dorn/all', methods=['GET'])
@@ -144,4 +144,4 @@ def graphData():
 
 
 if __name__ == '__main__':
-    app.run(port=105, debug=True)
+    app.run(port=80, host='0.0.0.0', debug=True)
